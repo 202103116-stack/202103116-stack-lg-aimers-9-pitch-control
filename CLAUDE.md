@@ -203,14 +203,25 @@ All executable code should use repository-relative paths (see
 │       ├── script.py
 │       ├── requirements.txt
 │       └── rf.pkl                # gitignored (binary)
-├── src/                          # reusable feature engineering / training / inference code
+├── src/                          # reusable feature engineering / training / packaging scripts
 ├── experiments/                  # TEMPLATE.md, SUBMISSION_LOG.md, and exp_*.md records (see "Experiment Discipline")
 ├── model/                        # trained model artifacts (gitignored)
 ├── output/                       # local prediction/submission csv output (gitignored)
-├── submission/                   # packaged submit.zip build output (gitignored)
+├── submission/
+│   ├── script.py                 # inference entry point (tracked)
+│   ├── requirements.txt          # minimal deps beyond pre-installed (tracked)
+│   ├── model/                    # copy of model artifacts for packaging (gitignored)
+│   ├── submit.zip                # always the latest build, upload this to DACON (gitignored)
+│   └── archive/                  # per-experiment copies, e.g. exp001_lgbm_submit.zip (gitignored)
 ├── README.md
 └── requirements.txt
 ```
+
+Build/rebuild `submission/submit.zip` with `python src/package_submission.py <label>`
+— do not hand-assemble the zip. The DACON code guide confirms the
+uploaded zip's filename is free-form (no spaces/Korean), only the
+internal structure (`model/`, `script.py`, `requirements.txt` at the
+zip root) must match exactly — that's what the script guarantees.
 
 Do not modify files in `notebooks/baseline/` or `references/`.
 Do not commit raw competition data or model binaries (already enforced
@@ -288,12 +299,20 @@ LightGBM/XGBoost는 사전 설치 목록에 없으므로 `requirements.txt`로
 설치해야 함 (10분 제한 내 설치되는지 확인 필요, `build-essential`/`cmake`/
 `gfortran`은 이미 있어 컴파일 필요한 패키지도 대체로 문제없음).
 
-로컬 개발 환경은 Python 3.11로 맞추고, pandas/numpy/scikit-learn 등은
-위 사전 설치 버전과 동일하게 맞춰서 버전 불일치로 인한 재현성 문제를
-피할 것 (현재 로컬 시스템 Python은 3.7 — 별도 3.11 환경 구성 필요, 아래
-"로컬 환경 셋업" 참고).
+로컬 개발 환경: `.venv`는 Python 3.11.9(시스템에 병행 설치된 버전)로
+구성되어 있고, pandas/numpy/scikit-learn/joblib은 위 사전 설치 버전과
+동일하게 맞춰 놓았음 (`requirements.txt` 참고). LightGBM/XGBoost는
+사전 설치 목록에 없어 별도 설치.
 
-Expected submitted archive layout (per `references/baseline_example/`):
+LightGBM 사용 시 주의: `LGBMClassifier`(sklearn 래퍼)를 joblib/pickle로
+저장했다가 다른 프로세스에서 로드하면 이 환경에서 네이티브 크래시
+(access violation)가 재현됨 (`experiments/exp_001_*.md` 참고). 반드시
+`booster_.save_model(path)` / `lgb.Booster(model_file=path)`(LightGBM
+자체 텍스트 포맷)으로 저장/로드할 것 — `src/train_lgbm.py`,
+`submission/script.py`가 이 패턴을 따름.
+
+Expected submitted archive layout — `src/package_submission.py`가
+이 구조로 `submission/submit.zip`을 생성함:
 ```
 submit.zip
 ├── model/           # trained model artifact(s)

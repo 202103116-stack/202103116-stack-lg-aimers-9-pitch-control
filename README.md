@@ -57,11 +57,16 @@ data/
 │       └── baseline_inference.ipynb
 ├── references/
 │   └── baseline_example/        # 공식 제출 예시 (script.py, requirements.txt, rf.pkl)
-├── src/                         # 팀 공용 피처엔지니어링 / 학습 / 추론 코드 (작업 예정)
+├── src/                         # 피처엔지니어링 / 학습 / 제출 패키징 스크립트
 ├── experiments/                 # 실험 기록 (가설/변경점/검증 스코어 로그)
 ├── model/                       # 학습된 모델 아티팩트 출력 (gitignore)
 ├── output/                      # 예측/제출 파일 출력 (gitignore)
-├── submission/                  # 제출용 submit.zip 패키징 산출물 (gitignore)
+├── submission/                  # 제출 패키징
+│   ├── script.py                # 추론 스크립트 (버전관리됨)
+│   ├── requirements.txt         # 제출용 최소 requirements (버전관리됨)
+│   ├── model/                   # 패키징용 모델 사본 (gitignore)
+│   ├── submit.zip               # 항상 최신 빌드 — Dacon에 이 파일만 업로드 (gitignore)
+│   └── archive/                 # 실험별 제출 이력 사본, 예: exp001_lgbm_submit.zip (gitignore)
 ├── CLAUDE.md                    # Claude Code 작업 규칙/컨텍스트
 ├── requirements.txt
 └── .gitignore
@@ -86,6 +91,18 @@ Windows에서 `jupyter` 설치가 "Long Path" 관련 오류로 실패할 수 있
 3. `notebooks/baseline/baseline_inference.ipynb` 실행 → `output/submission.csv` 생성
 
 베이스라인은 `trackman_history.csv`를 활용하지 않는 얕은 RandomForest 모델입니다. 개선 방향은 주로 (1) `trackman_history.csv` 기반 피처 엔지니어링, (2) `asof_*` cold-start 결측치 처리/smoothing, (3) 더 강력한 모델(LightGBM/XGBoost 등)로의 전환입니다.
+
+exp_001(LightGBM + 파생 피처)은 `python src/train_lgbm.py`로 재현할 수 있습니다.
+
+## 제출 패키징
+
+`model/` 안의 학습된 아티팩트가 준비되면, 아래 명령으로 `submission/submit.zip`(Dacon 업로드용, 항상 최신)과 `submission/archive/<label>_submit.zip`(이력 보관용 사본)을 함께 생성합니다.
+
+```bash
+python src/package_submission.py exp001_lgbm
+```
+
+Dacon에는 **항상 `submission/submit.zip`만** 업로드하면 됩니다 — 실험이 바뀌어도 파일명이 고정돼 있어 헷갈릴 일이 없습니다. zip 내부 구조(`model/`, `script.py`, `requirements.txt`가 최상위)는 Dacon 코드 제출 가이드와 정확히 일치하도록 스크립트가 보장합니다.
 
 ## 작업 워크플로우 & 실험 기록
 
