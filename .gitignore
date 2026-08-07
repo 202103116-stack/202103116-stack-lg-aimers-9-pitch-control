@@ -1,0 +1,28 @@
+# Competition data (large files, not versioned)
+data/*.csv
+data/*.zip
+
+# Trained model artifacts
+model/*.pkl
+model/*.joblib
+references/baseline_example/rf.pkl
+output/*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+*.egg-info/
+
+# Environments
+.venv/
+venv/
+env/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Archives
+*.zip
