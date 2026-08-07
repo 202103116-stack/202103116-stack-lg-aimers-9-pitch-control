@@ -252,7 +252,7 @@ meetings to see progress at a glance.
 
 ## Submission Constraints
 
-평가 서버 사양 (공식 제출 가이드 기준, 사용자 확인):
+평가 서버 사양 — 출처: https://dacon.io/competitions/official/236743/overview/evaluation (직접 확인 완료, 2026-08-07):
 - OS: Ubuntu 22.04.5 LTS
 - Python: 3.11.15
 - CUDA: 12.8 이상
@@ -265,9 +265,33 @@ meetings to see progress at a glance.
 - Submission zip <= 10GB, <= 32GB uncompressed
 - Language: Python only (`.py` or `.ipynb`, UTF-8)
 
-`requirements.txt`는 이 Python 3.11.15 / CUDA 12.8+ 환경에서 설치 가능한
-버전으로 고정할 것. 로컬 개발 환경도 가능하면 Python 3.11로 맞춰서 버전
-불일치로 인한 재현성 문제를 피할 것.
+사전 설치된 주요 Python 라이브러리 (버전 호환이 이미 맞춰져 있으므로,
+`requirements.txt`에는 가급적 이 버전과 다르게 재지정하지 않는 것을 권장):
+```
+torch==2.7.1+cu128       pandas==2.0.3           numpy==1.26.4
+scipy==1.15.3            scikit-learn==1.8.0     joblib==1.5.3
+threadpoolctl==3.6.0     narwhals==2.21.2        transformers==4.46.3
+accelerate==1.9.0        sentencepiece==0.1.99   regex==2023.12.25
+tqdm==4.66.4              loguru==0.7.2           pyyaml==6.0.1
+rich==13.7.1
+```
+
+사전 설치된 시스템 패키지:
+```
+git, build-essential, python3.11, python3.11-dev, python3.11-venv,
+python3-pip, libffi-dev, libblas3, liblapack3, libomp-dev, tzdata,
+unzip, p7zip-full, gfortran, libatlas-base-dev, default-jre-headless,
+cmake, pkg-config, ninja-build, libgl1, libglib2.0-0
+```
+
+LightGBM/XGBoost는 사전 설치 목록에 없으므로 `requirements.txt`로
+설치해야 함 (10분 제한 내 설치되는지 확인 필요, `build-essential`/`cmake`/
+`gfortran`은 이미 있어 컴파일 필요한 패키지도 대체로 문제없음).
+
+로컬 개발 환경은 Python 3.11로 맞추고, pandas/numpy/scikit-learn 등은
+위 사전 설치 버전과 동일하게 맞춰서 버전 불일치로 인한 재현성 문제를
+피할 것 (현재 로컬 시스템 Python은 3.7 — 별도 3.11 환경 구성 필요, 아래
+"로컬 환경 셋업" 참고).
 
 Expected submitted archive layout (per `references/baseline_example/`):
 ```
