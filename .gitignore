@@ -5,12 +5,13 @@ data/*.zip
 # Trained model artifacts
 model/*.pkl
 model/*.joblib
+model/*.txt
 references/baseline_example/rf.pkl
 output/*.csv
 
-# Submission packaging artifacts (rebuilt from src/ + model/ before each submit)
-submission/*
-!submission/.gitkeep
+# Submission packaging artifacts (binary — rebuilt by src/train_lgbm.py before each submit)
+submission/model/
+submission/*.zip
 
 # Python
 __pycache__/

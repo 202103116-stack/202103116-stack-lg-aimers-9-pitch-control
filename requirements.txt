@@ -5,8 +5,8 @@ scikit-learn==1.8.0
 joblib==1.5.3
 
 # 평가 서버에 없어서 별도 설치 필요 (제출용 requirements.txt에도 포함)
-lightgbm
-xgboost
+lightgbm==4.7.0
+xgboost==3.2.0
 
 # 로컬 개발/EDA 전용 (제출용 requirements.txt에는 불필요)
 matplotlib

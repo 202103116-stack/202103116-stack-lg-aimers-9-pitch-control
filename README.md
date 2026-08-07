@@ -69,11 +69,15 @@ data/
 
 ## 환경 설정
 
+평가 서버가 **Python 3.11.15**를 쓰므로(CLAUDE.md "Submission Constraints" 참고), 로컬도 Python 3.11로 맞출 것. 시스템 기본 `python`이 3.11이 아니면 `py -3.11` 등으로 버전을 지정할 것.
+
 ```bash
-python -m venv .venv
+py -3.11 -m venv .venv
 .venv\Scripts\activate        # Windows
 pip install -r requirements.txt
 ```
+
+Windows에서 `jupyter` 설치가 "Long Path" 관련 오류로 실패할 수 있음 — 이 경우 나머지 패키지(pandas/scikit-learn/lightgbm/xgboost 등)는 정상 설치되니 우선 스크립트로 작업을 진행하고, jupyter가 필요하면 [Windows 긴 경로 지원 활성화](https://pip.pypa.io/warnings/enable-long-paths) 후 재설치할 것.
 
 ## 베이스라인 실행
 
