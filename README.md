@@ -58,8 +58,11 @@ data/
 ├── references/
 │   └── baseline_example/        # 공식 제출 예시 (script.py, requirements.txt, rf.pkl)
 ├── src/                         # 팀 공용 피처엔지니어링 / 학습 / 추론 코드 (작업 예정)
+├── experiments/                 # 실험 기록 (가설/변경점/검증 스코어 로그)
 ├── model/                       # 학습된 모델 아티팩트 출력 (gitignore)
 ├── output/                      # 예측/제출 파일 출력 (gitignore)
+├── submission/                  # 제출용 submit.zip 패키징 산출물 (gitignore)
+├── CLAUDE.md                    # Claude Code 작업 규칙/컨텍스트
 ├── requirements.txt
 └── .gitignore
 ```

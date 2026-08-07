@@ -8,6 +8,10 @@ model/*.joblib
 references/baseline_example/rf.pkl
 output/*.csv
 
+# Submission packaging artifacts (rebuilt from src/ + model/ before each submit)
+submission/*
+!submission/.gitkeep
+
 # Python
 __pycache__/
 *.py[cod]
