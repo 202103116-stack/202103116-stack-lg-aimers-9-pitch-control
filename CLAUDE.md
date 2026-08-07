@@ -140,23 +140,24 @@ Do not silently change the baseline during baseline reproduction.
 
 ## Required ML Workflow
 
-Follow this lifecycle:
+Full description with per-stage detail and the file/folder each stage
+maps to: `docs/WORKFLOW.md`. Short version:
 
 1. Problem definition
-2. Data understanding
+2. Data acquisition & understanding
 3. Data quality / leakage audit
 4. Validation design
-5. Baseline reproduction
-6. Feature engineering
-7. Model training
-8. Evaluation
-9. Error analysis
-10. Experiment iteration
-11. Final training
-12. Offline inference test
-13. Submission packaging
+5. Baseline reproduction, then preprocessing / feature engineering
+6. Modeling & training
+7. Evaluation & error analysis
+   → loop back to 5/6 with a new hypothesis (this is where most iteration happens)
+8. Final training & deployment (= full retrain + submission packaging,
+   not production deployment)
+9. Monitoring & iteration (= log the leaderboard result, compare to
+   local validation, decide the next hypothesis)
 
-Do not jump directly to complex models.
+Do not jump directly to complex models. Reproduce the official baseline
+first (step 5) before changing anything.
 
 ---
 
@@ -191,7 +192,8 @@ All executable code should use repository-relative paths (see
 .
 ├── data/                         # competition data (gitignored, populate locally)
 ├── docs/
-│   └── data_description.md       # official data dictionary
+│   ├── data_description.md       # official data dictionary
+│   └── WORKFLOW.md               # full 9-stage ML workflow, mapped to this repo
 ├── notebooks/
 │   └── baseline/                 # official baseline notebooks (do not modify)
 │       ├── baseline_train.ipynb
@@ -202,7 +204,7 @@ All executable code should use repository-relative paths (see
 │       ├── requirements.txt
 │       └── rf.pkl                # gitignored (binary)
 ├── src/                          # reusable feature engineering / training / inference code
-├── experiments/                  # experiment records (see "Experiment Discipline")
+├── experiments/                  # TEMPLATE.md, SUBMISSION_LOG.md, and exp_*.md records (see "Experiment Discipline")
 ├── model/                        # trained model artifacts (gitignored)
 ├── output/                       # local prediction/submission csv output (gitignored)
 ├── submission/                   # packaged submit.zip build output (gitignored)
@@ -218,7 +220,8 @@ via `.gitignore`).
 
 ## Experiment Discipline
 
-Before every experiment, state:
+Use `experiments/TEMPLATE.md` for every experiment (copy it to
+`experiments/exp_XXX_short-name.md`). Before every experiment, state:
 - experiment ID
 - hypothesis
 - baseline
@@ -226,7 +229,7 @@ Before every experiment, state:
 - validation method
 - leakage risk
 
-After every experiment, record (e.g. in `experiments/`):
+After every experiment, record:
 - features
 - model
 - hyperparameters
@@ -239,6 +242,11 @@ After every experiment, record (e.g. in `experiments/`):
 - next hypothesis
 
 Never claim an improvement without an actual executed comparison.
+
+Every leaderboard submission also gets one row in
+`experiments/SUBMISSION_LOG.md` (date, local score, leaderboard
+score/rank, what changed, next plan) — this is what the team uses in
+meetings to see progress at a glance.
 
 ---
 

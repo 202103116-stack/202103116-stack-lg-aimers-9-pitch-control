@@ -83,6 +83,13 @@ pip install -r requirements.txt
 
 베이스라인은 `trackman_history.csv`를 활용하지 않는 얕은 RandomForest 모델입니다. 개선 방향은 주로 (1) `trackman_history.csv` 기반 피처 엔지니어링, (2) `asof_*` cold-start 결측치 처리/smoothing, (3) 더 강력한 모델(LightGBM/XGBoost 등)로의 전환입니다.
 
+## 작업 워크플로우 & 실험 기록
+
+이 프로젝트는 [`docs/WORKFLOW.md`](docs/WORKFLOW.md)에 정리된 9단계 ML 워크플로우(문제정의 → 데이터이해 → 누수검증 → 검증전략 → 전처리/FE → 모델링 → 평가/오류분석 → 최종학습/제출 → 회고, 7→5/6 피드백 루프 포함)를 따릅니다.
+
+- 새 실험(피처/모델 변경)을 시작할 때: [`experiments/TEMPLATE.md`](experiments/TEMPLATE.md)를 복사해서 `experiments/exp_XXX_설명.md`로 기록
+- 리더보드에 제출할 때마다: [`experiments/SUBMISSION_LOG.md`](experiments/SUBMISSION_LOG.md)에 한 줄 기록 → 팀 회의 때 이 파일 기준으로 진행상황 공유
+
 ## 팀
 
 5인 팀 (Phase 2 진행 중)
