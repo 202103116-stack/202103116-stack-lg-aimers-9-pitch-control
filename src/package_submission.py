@@ -6,7 +6,10 @@ Dacon 제출 규격(model/, script.py, requirements.txt가 zip 최상위에 바�
     python src/package_submission.py exp001_lgbm
 
 - submission/submit.zip: 항상 최신 빌드 (Dacon에 이 파일을 업로드)
-- submission/archive/<label>_submit.zip: 실험별 이력 보관용 사본
+- submission/archive/<label>/: 그 실험에서 실제로 쓰인 model/, script.py,
+  requirements.txt 원본 그대로 + 그때 만든 submit.zip까지 통째로 보존
+  (압축을 안 풀어도 파일을 바로 열어볼 수 있고, 나중에 모델 종류가
+  바뀌어도 이전 버전 정보가 사라지지 않음)
 """
 
 import argparse
@@ -18,23 +21,33 @@ MODEL_DIR = "./model"
 SUBMISSION_DIR = "./submission"
 
 
+def _fresh_dir(path):
+    if os.path.exists(path):
+        shutil.rmtree(path)
+    os.makedirs(path)
+
+
 def build(label):
+    # 1) submission/model/: 압축 대상 스테이징. 매번 비우고 ./model/의
+    #    현재 내용으로 다시 채운다 - 안 비우면 예전 실험에서 쓰던 파일이
+    #    (예: 모델 종류를 바꿔서 파일명이 달라진 경우) 계속 남아 쌓인다.
     sub_model_dir = os.path.join(SUBMISSION_DIR, "model")
-    os.makedirs(sub_model_dir, exist_ok=True)
+    _fresh_dir(sub_model_dir)
     for fname in os.listdir(MODEL_DIR):
+        if fname == ".gitkeep":
+            continue
         shutil.copy2(os.path.join(MODEL_DIR, fname), os.path.join(sub_model_dir, fname))
 
+    script_path = os.path.join(SUBMISSION_DIR, "script.py")
+    req_path = os.path.join(SUBMISSION_DIR, "requirements.txt")
+
+    # 2) submission/submit.zip: 항상 최신 빌드, 이 이름 고정.
     zip_path = os.path.join(SUBMISSION_DIR, "submit.zip")
     if os.path.exists(zip_path):
         os.remove(zip_path)
 
-    entries = {
-        "script.py": os.path.join(SUBMISSION_DIR, "script.py"),
-        "requirements.txt": os.path.join(SUBMISSION_DIR, "requirements.txt"),
-    }
+    entries = {"script.py": script_path, "requirements.txt": req_path}
     for fname in os.listdir(sub_model_dir):
-        if fname == ".gitkeep":
-            continue
         entries[f"model/{fname}"] = os.path.join(sub_model_dir, fname)
 
     # zipfile은 arcname을 준 그대로 저장한다 (OS와 무관하게 '/' 를 직접
@@ -43,13 +56,18 @@ def build(label):
         for arcname, path in entries.items():
             zf.write(path, arcname)
 
-    archive_dir = os.path.join(SUBMISSION_DIR, "archive")
-    os.makedirs(archive_dir, exist_ok=True)
-    archive_path = os.path.join(archive_dir, f"{label}_submit.zip")
-    shutil.copy2(zip_path, archive_path)
+    # 3) submission/archive/<label>/: 이번 빌드에 쓰인 원본 파일 전체를
+    #    라벨별 폴더로 통째 보존 (같은 라벨로 다시 실행하면 그 라벨만
+    #    깨끗하게 덮어씀 - 다른 라벨의 기록은 건드리지 않음).
+    archive_dir = os.path.join(SUBMISSION_DIR, "archive", label)
+    _fresh_dir(archive_dir)
+    shutil.copytree(sub_model_dir, os.path.join(archive_dir, "model"))
+    shutil.copy2(script_path, os.path.join(archive_dir, "script.py"))
+    shutil.copy2(req_path, os.path.join(archive_dir, "requirements.txt"))
+    shutil.copy2(zip_path, os.path.join(archive_dir, "submit.zip"))
 
     print(f"Built:    {zip_path}  (Dacon에 이 파일을 업로드)")
-    print(f"Archived: {archive_path}")
+    print(f"Archived: {archive_dir}/  (model/, script.py, requirements.txt 원본 + submit.zip 보존)")
 
 
 if __name__ == "__main__":

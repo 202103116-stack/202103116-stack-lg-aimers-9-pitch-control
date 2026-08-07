@@ -64,9 +64,9 @@ data/
 ├── submission/                  # 제출 패키징
 │   ├── script.py                # 추론 스크립트 (버전관리됨)
 │   ├── requirements.txt         # 제출용 최소 requirements (버전관리됨)
-│   ├── model/                   # 패키징용 모델 사본 (gitignore)
+│   ├── model/                   # 패키징용 모델 사본, 매번 새로 채워짐 (gitignore)
 │   ├── submit.zip               # 항상 최신 빌드 — Dacon에 이 파일만 업로드 (gitignore)
-│   └── archive/                 # 실험별 제출 이력 사본, 예: exp001_lgbm_submit.zip (gitignore)
+│   └── archive/<label>/         # 실험별 원본 보존: model/, script.py, requirements.txt, submit.zip 통째로 (gitignore)
 ├── CLAUDE.md                    # Claude Code 작업 규칙/컨텍스트
 ├── requirements.txt
 └── .gitignore
@@ -96,13 +96,15 @@ exp_001(LightGBM + 파생 피처)은 `python src/train_lgbm.py`로 재현할 수
 
 ## 제출 패키징
 
-`model/` 안의 학습된 아티팩트가 준비되면, 아래 명령으로 `submission/submit.zip`(Dacon 업로드용, 항상 최신)과 `submission/archive/<label>_submit.zip`(이력 보관용 사본)을 함께 생성합니다.
+`model/` 안의 학습된 아티팩트가 준비되면, 아래 명령으로 `submission/submit.zip`(Dacon 업로드용, 항상 최신)과 `submission/archive/<label>/`(그 실험에 쓰인 `model/`·`script.py`·`requirements.txt` 원본 + 그때의 `submit.zip`까지 통째로 보존)을 함께 생성합니다.
 
 ```bash
 python src/package_submission.py exp001_lgbm
 ```
 
 Dacon에는 **항상 `submission/submit.zip`만** 업로드하면 됩니다 — 실험이 바뀌어도 파일명이 고정돼 있어 헷갈릴 일이 없습니다. zip 내부 구조(`model/`, `script.py`, `requirements.txt`가 최상위)는 Dacon 코드 제출 가이드와 정확히 일치하도록 스크립트가 보장합니다.
+
+과거 실험으로 되돌아가고 싶으면 `submission/archive/<label>/`을 그대로 열어보면 됩니다 — 압축을 풀 필요 없이 그 버전의 `model/`, `script.py`가 파일 그대로 남아있고, 그때 제출했던 `submit.zip` 사본도 같이 있습니다. 같은 `<label>`로 다시 패키징하면 그 라벨의 기록만 새로 덮어쓰고 다른 라벨은 그대로 유지됩니다.
 
 ## 작업 워크플로우 & 실험 기록
 

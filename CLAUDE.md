@@ -210,9 +210,9 @@ All executable code should use repository-relative paths (see
 ├── submission/
 │   ├── script.py                 # inference entry point (tracked)
 │   ├── requirements.txt          # minimal deps beyond pre-installed (tracked)
-│   ├── model/                    # copy of model artifacts for packaging (gitignored)
+│   ├── model/                    # copy of model artifacts for packaging, rebuilt fresh each run (gitignored)
 │   ├── submit.zip                # always the latest build, upload this to DACON (gitignored)
-│   └── archive/                  # per-experiment copies, e.g. exp001_lgbm_submit.zip (gitignored)
+│   └── archive/<label>/          # full snapshot per experiment: model/, script.py, requirements.txt, submit.zip (gitignored)
 ├── README.md
 └── requirements.txt
 ```

@@ -10,9 +10,10 @@ references/baseline_example/rf.pkl
 output/*.csv
 
 # Submission packaging artifacts (binary — rebuilt by src/package_submission.py
-# before each submit; submission/submit.zip and submission/archive/*.zip are
-# also covered by the blanket *.zip rule below)
+# before each submit; submission/submit.zip is also covered by the blanket
+# *.zip rule below, kept explicit here for clarity)
 submission/model/
+submission/archive/
 
 # Python
 __pycache__/
