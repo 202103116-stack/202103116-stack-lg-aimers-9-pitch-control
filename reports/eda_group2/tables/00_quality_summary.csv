@@ -1,0 +1,9 @@
+column,dtype,n_null,min,max,n_unique
+balls_before,int64,0,0,3,4
+strikes_before,int64,0,0,2,3
+outs_before,int64,0,0,2,3
+run_top_before,int64,0,0,30,30
+run_bot_before,int64,0,0,26,25
+run_total_before,int64,0,0,37,38
+score_diff_home,int64,0,-27,20,47
+score_diff_pitcher_team,int64,0,-27,27,52

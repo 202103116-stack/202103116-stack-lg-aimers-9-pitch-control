@@ -9,11 +9,14 @@ model/*.txt
 references/baseline_example/rf.pkl
 output/*.csv
 
-# Submission packaging artifacts (binary — rebuilt by src/package_submission.py
+# Submission packaging artifacts (rebuilt by src/package_submission.py
 # before each submit; submission/submit.zip is also covered by the blanket
-# *.zip rule below, kept explicit here for clarity)
+# *.zip rule below, kept explicit here for clarity). submission/features.py
+# is a fresh copy of src/features.py made at packaging time (exp_002+) —
+# src/features.py is the tracked source of truth, this copy is not.
 submission/model/
 submission/archive/
+submission/features.py
 
 # Python
 __pycache__/

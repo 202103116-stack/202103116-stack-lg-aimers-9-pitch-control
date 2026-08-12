@@ -19,11 +19,39 @@ data is the **2025 season**.
 
 ---
 
+## Target Definition (`control_success`)
+
+`docs/data_description.md` does not state what physically makes a pitch
+"controlled" or not. This is confirmed only in the DACON notice/FAQ
+(`docs/dacon_notice.md`, §1-1), not in the data dictionary:
+
+Per the official notice, control success in this competition is defined
+by the pitch's final ball location. A pitch is **control failure (0)**
+if any of the following apply; every other valid pitch is
+**control success (1)**:
+
+1. The pitch lands near the middle of the strike zone (스트라이크존
+   가운데 부근)
+2. The pitch misses far outside the strike zone (스트라이크존에서
+   크게 벗어남)
+3. The pitch goes in the direction opposite the catcher's requested
+   location (포수의 요구 방향과 반대)
+
+This maps directly onto existing official `asof_*` columns and should
+inform feature-engineering rationale and any explainability writeups
+(e.g. for Phase 3): `asof_pitcher_middle_rate` tracks failure mode 1,
+`asof_pitcher_ball_rate` tracks failure mode 2, and
+`asof_pitcher_reverse_rate` tracks failure mode 3.
+
+---
+
 ## Ground Truth Sources
 
 When making decisions, use the following priority:
 
 1. DACON official competition description, evaluation, rules, notices
+   (mirrored locally at `docs/dacon_notice.md` — collected 2026-08-12;
+   if it conflicts with anything below, this source wins)
 2. `docs/data_description.md` (official data dictionary)
 3. Official distributed dataset (`data/`)
 4. Official baseline notebooks (`notebooks/baseline/`) and
@@ -67,6 +95,14 @@ official source).
     and 2025 Trackman data does not exist / must not be assumed.
 11. The final submission must run fully offline.
 12. Do not modify official raw data in `data/`.
+13. Do not share competition-related source/executable code privately
+    with anyone outside the registered team during the competition
+    period. Public sharing is only allowed through DACON's own
+    platform, not third-party services. **Do not make the GitHub
+    remote (`202103116-stack/202103116-stack-lg-aimers-9-pitch-control`)
+    public** — confirmed Private as of 2026-08-12; keep it that way at
+    least through code verification (2026-09-11). Source:
+    `docs/dacon_notice.md`, "다. 일반 대회 규정" §8.
 
 If any feature or approach may violate these rules, STOP and explicitly
 warn the user before implementing it.
@@ -193,6 +229,7 @@ All executable code should use repository-relative paths (see
 ├── data/                         # competition data (gitignored, populate locally)
 ├── docs/
 │   ├── data_description.md       # official data dictionary
+│   ├── dacon_notice.md           # official DACON notice/FAQ, verbatim (rules, eval, target definition)
 │   └── WORKFLOW.md               # full 9-stage ML workflow, mapped to this repo
 ├── notebooks/
 │   └── baseline/                 # official baseline notebooks (do not modify)
@@ -261,6 +298,21 @@ meetings to see progress at a glance.
 
 ---
 
+## Evaluation Stages & Completion Threshold
+
+출처: `docs/dacon_notice.md` §1-2 (2026-08-12 확인).
+
+- **LG Aimers 수료(완주) 조건**: Phase1 이수 + Phase2 Public Score가
+  공식 baseline의 실제 리더보드 점수인 **549.51 이상**. (이 팀은
+  exp_001 기준 781.01로 이미 통과.)
+- **1차 평가**: 리더보드 Private Score 100% (동점자는 먼저 참가한
+  팀 우선).
+- **2차 평가**: Phase3(오프라인 해커톤) 진출을 희망하는 팀만 해당 —
+  Private 상위 약 100팀이 코드 + PPT 제출 후 코드 검증을 모두 통과해야
+  최종 진출.
+
+---
+
 ## Submission Constraints
 
 평가 서버 사양 — 출처: https://dacon.io/competitions/official/236743/overview/evaluation (직접 확인 완료, 2026-08-07):
@@ -321,6 +373,22 @@ submit.zip
 ```
 
 The script must create: `output/submission.csv`
+
+**제출 오류 유형 구분** (출처: `docs/dacon_notice.md` §1-2, "유의사항" —
+일일 5회 제출 제한과 직결되므로 중요):
+- **설치 오류** — `submit.zip` 내부 구조 불일치, 패키지 설치 실패 등
+  → **일일 제출 횟수에 반영되지 않음**.
+- **제출 오류** — `script.py` 실행 후 발생하는 모든 오류 →
+  **일일 제출 횟수에 반영됨**.
+- 즉 zip 구조 실수는 재시도가 "무료"지만, `script.py`가 실행 중
+  죽는 건 슬롯을 소모한다. 그래서 제출 전 반드시 격리된 폴더에서
+  `submit.zip`을 풀어 새 프로세스로 재현 테스트를 거친다 (exp_001,
+  exp_002에서 이미 하고 있는 절차).
+- 참고: 같은 공지문의 다른 문단에는 평가 시 읽어들이는 디렉토리를
+  `open/`이라고 쓴 곳이 있으나, 같은 문서의 제출 파일 구조 다이어그램과
+  공식 baseline 노트북(`DATA_DIR = "./data"`) 모두 `data/`를 사용한다 —
+  `open/`은 다운로드용 `open.zip`과 혼동한 오탈자로 판단, `data/`가 맞다.
+  (이미 우리 코드는 `data/`를 정확히 쓰고 있어 변경 불필요.)
 
 Before packaging, verify:
 - no NaN

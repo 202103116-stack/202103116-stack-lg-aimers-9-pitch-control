@@ -38,6 +38,14 @@ def build(label):
             continue
         shutil.copy2(os.path.join(MODEL_DIR, fname), os.path.join(sub_model_dir, fname))
 
+    # exp_002부터: submission/script.py가 src/features.py를 그대로 import해서
+    # 쓰므로(더 이상 피처 로직을 손으로 복붙하지 않음), 그 소스를 zip에 같이
+    # 넣어야 한다. Dacon 공식 구조는 zip 최상위가 정확히 model/, script.py,
+    # requirements.txt여야 한다고 명시되어 있어 최상위에 4번째 파일을 얹지
+    # 않고, model/ 폴더 "안"에 넣는다 (model/ 내부 파일 구성 자체는 제약이
+    # 없음 — lgbm_booster.txt/lgbm_meta.pkl도 이미 자유롭게 여기 들어있음).
+    shutil.copy2("./src/features.py", os.path.join(sub_model_dir, "features.py"))
+
     script_path = os.path.join(SUBMISSION_DIR, "script.py")
     req_path = os.path.join(SUBMISSION_DIR, "requirements.txt")
 

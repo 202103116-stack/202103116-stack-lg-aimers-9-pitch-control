@@ -1,4 +1,7 @@
-"""exp_001 — baseline features + safe derived features, LightGBM.
+"""exp_002 — baseline features + exp_001/exp_002 derived features
+(incl. cold-start shrinkage) + LightGBM (model/hyperparameters unchanged
+from exp_001, per exp_002's single-change discipline: only the feature
+set changed this round).
 
 Validation: season 2019-2023 train / season 2024 held out (matches the
 official baseline, see CLAUDE.md "Validation Policy"). After validation,
@@ -15,7 +18,14 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import OrdinalEncoder
 
-from features import CAT_COLS, DERIVED_COLS, build_features
+from features import (
+    CAT_COLS,
+    DERIVED_COLS,
+    SHRUNK_COLS,
+    apply_shrinkage,
+    build_features,
+    fit_shrinkage_priors,
+)
 
 DATA_DIR = "./data"
 MODEL_DIR = "./model"
@@ -26,7 +36,7 @@ TARGET = "control_success"
 test_cols = pd.read_csv(os.path.join(DATA_DIR, "test.csv"),
                          encoding="utf-8-sig", nrows=0).columns
 BASE_FEATURES = [c for c in test_cols if c != ID]
-ALL_FEATURES = BASE_FEATURES + DERIVED_COLS
+ALL_FEATURES = BASE_FEATURES + DERIVED_COLS + SHRUNK_COLS
 
 train = pd.read_csv(os.path.join(DATA_DIR, "train.csv"),
                      encoding="utf-8-sig", usecols=BASE_FEATURES + [TARGET])
@@ -41,13 +51,21 @@ cat_encoder = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-
 train[CAT_COLS] = cat_encoder.fit_transform(train[CAT_COLS]).astype(int)
 
 print("train:", train.shape, "| 피처:", len(ALL_FEATURES),
-      f"(범주형 {len(CAT_COLS)}, 파생 {len(DERIVED_COLS)})")
+      f"(범주형 {len(CAT_COLS)}, 파생 {len(DERIVED_COLS)}, shrinkage {len(SHRUNK_COLS)})")
 print("시즌:", train["season"].min(), "~", train["season"].max())
 print(f"제구 성공률: {train[TARGET].mean():.4f}")
 
 is_val = train["season"] == 2024
-X_train, y_train = train.loc[~is_val, ALL_FEATURES], train.loc[~is_val, TARGET]
-X_val, y_val = train.loc[is_val, ALL_FEATURES], train.loc[is_val, TARGET]
+
+# Cold-start shrinkage priors (features.py의 fit_shrinkage_priors)는 반드시
+# 학습 스플릿에서만 계산한다 — 검증용 실행이므로 2019-2023만 사용
+# (2024 val 통계가 "학습에서 유래한" 피처로 새어 들어가면 검증 점수가
+# 부정확하게 부풀려짐).
+val_priors = fit_shrinkage_priors(train.loc[~is_val])
+train_shrunk = apply_shrinkage(train, val_priors)
+
+X_train, y_train = train_shrunk.loc[~is_val, ALL_FEATURES], train_shrunk.loc[~is_val, TARGET]
+X_val, y_val = train_shrunk.loc[is_val, ALL_FEATURES], train_shrunk.loc[is_val, TARGET]
 print("train:", len(X_train), "| val:", len(X_val))
 
 params = dict(
@@ -84,6 +102,28 @@ print(f"Brier: {brier:.6f} | 기준선 r(1-r): {baseline_brier:.6f}")
 print(f"Validation Score: {score:.2f}")
 print(f"pred mean/min/max: {val_pred.mean():.4f} / {val_pred.min():.4f} / {val_pred.max():.4f}")
 
+# 오류 분석: 상황별로 예측이 특히 나쁜 구간이 있는지 확인 (워크플로우
+# 7단계). 각 구간의 Brier와 전체 기준선 대비 상대 점수를 같이 본다.
+val_seg = train_shrunk.loc[is_val, ["two_strike", "is_close_game", "asof_pitcher_n"]].copy()
+val_seg["pred"] = val_pred
+val_seg["y"] = y_val.values
+val_seg["cold_start"] = val_seg["asof_pitcher_n"] < 50  # shrinkage k와 동일 기준
+
+print("오류 분석 (구간별 Brier, n, 실제 성공률 vs 평균 예측):")
+segments = {
+    "two_strike=1": val_seg["two_strike"] == 1,
+    "two_strike=0": val_seg["two_strike"] == 0,
+    "is_close_game=1": val_seg["is_close_game"] == 1,
+    "is_close_game=0": val_seg["is_close_game"] == 0,
+    "cold_start(n<50)": val_seg["cold_start"],
+    "warm(n>=50)": ~val_seg["cold_start"],
+}
+for name, mask in segments.items():
+    sub = val_seg.loc[mask]
+    seg_brier = ((sub["pred"] - sub["y"]) ** 2).mean()
+    print(f"  {name}: n={len(sub)}, brier={seg_brier:.6f}, "
+          f"실제 성공률={sub['y'].mean():.4f}, 평균예측={sub['pred'].mean():.4f}")
+
 top_importance = sorted(
     zip(ALL_FEATURES, clf.feature_importances_), key=lambda x: -x[1]
 )[:15]
@@ -91,13 +131,22 @@ print("Top 15 feature importance:")
 for name, imp in top_importance:
     print(f"  {name}: {imp}")
 
-# 전체 데이터(2019~2024)로 최종 재학습, best_iteration 고정
+# 전체 데이터(2019~2024)로 최종 재학습, best_iteration 고정.
+# 제출용 모델이므로 shrinkage prior도 전체 2019-2024로 다시 fit —
+# 이제는 전체가 "학습 데이터"이므로 val_priors를 재사용하지 않는다
+# (val_priors는 2019-2023만 봤으므로 2024 시즌 정보가 반영 안 됨).
+final_priors = fit_shrinkage_priors(train)
+print("shrinkage prior 확인 (val_priors 2019-2023 vs final_priors 2019-2024):")
+for rate_col in list(val_priors)[:3]:
+    print(f"  {rate_col}: {val_priors[rate_col]:.4f} -> {final_priors[rate_col]:.4f}")
+train_final = apply_shrinkage(train, final_priors)
+
 final_params = dict(params)
 final_params["n_estimators"] = clf.best_iteration_
 final_clf = lgb.LGBMClassifier(**final_params)
 
 t = time.time()
-final_clf.fit(train[ALL_FEATURES], train[TARGET], categorical_feature=CAT_COLS)
+final_clf.fit(train_final[ALL_FEATURES], train_final[TARGET], categorical_feature=CAT_COLS)
 print(f"최종 재학습 완료 :: {time.time() - t:.1f}s")
 
 os.makedirs(MODEL_DIR, exist_ok=True)
@@ -115,6 +164,7 @@ joblib.dump(
         "all_features": ALL_FEATURES,
         "cat_cols": CAT_COLS,
         "cat_encoder": cat_encoder,
+        "shrinkage_priors": final_priors,
     },
     os.path.join(MODEL_DIR, "lgbm_meta.pkl"),
     compress=3,

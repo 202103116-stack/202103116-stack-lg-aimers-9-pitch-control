@@ -1,15 +1,25 @@
-# script.py — exp_001: baseline features + safe derived features + LightGBM
+# script.py — exp_002: baseline + exp_001/exp_002 derived features
+# (cold-start shrinkage 포함) + LightGBM
 import os
+import sys
 
 import joblib
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
 
+# 피처 로직은 src/features.py 원본을 그대로 사용한다 (더 이상 손으로
+# 복붙해서 동기화하지 않음). Dacon 공식 zip 구조(model/, script.py,
+# requirements.txt만 최상위)를 그대로 지키기 위해, src/package_submission.py가
+# features.py를 zip 루트가 아니라 model/ 폴더 안에 넣어둔다. script.py의
+# 실행 위치(cwd)와 무관하게 항상 자기 자신 파일 기준 상대경로로
+# model/ 을 찾아 sys.path에 추가해야 어디서 실행해도 import가 된다.
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(_SCRIPT_DIR, "model"))
+from features import CAT_COLS, apply_shrinkage, build_features
+
 ID_COL = "row_id"
 TARGET_COL = "control_success"
-
-CAT_COLS = ["top_bottom", "game_type", "base_state"]
 
 
 # =======================
@@ -33,48 +43,15 @@ def load_sample_submission(path):
 
 
 # =======================
-# 피처 엔지니어링 (학습 때와 동일 — src/features.py와 내용 일치)
+# 추론용 피처 파이프라인
 # =======================
 
-def build_features(df, cat_encoder):
-    """row_id를 제외한 원본 컬럼 + 행 단위 파생 컬럼. 다른 행 정보는 쓰지 않음."""
+def build_features_for_inference(df, cat_encoder, shrinkage_priors):
+    """row_id 제거 + src/features.py의 build_features/apply_shrinkage +
+    학습 때와 동일한 인코더로 범주형 정수 인코딩. 다른 행 정보는 쓰지 않음."""
     df = df.drop(columns=[ID_COL]).copy()
-
-    df["count_diff"] = df["strikes_before"] - df["balls_before"]
-    df["count_total"] = df["strikes_before"] + df["balls_before"]
-    df["two_strike"] = (df["strikes_before"] == 2).astype(int)
-    df["three_ball"] = (df["balls_before"] == 3).astype(int)
-    df["full_count"] = df["two_strike"] & df["three_ball"]
-
-    df["late_inning"] = (df["inning"] >= 7).astype(int)
-
-    df["score_margin_abs"] = df["score_diff_pitcher_team"].abs()
-    df["is_close_game"] = (df["score_margin_abs"] <= 1).astype(int)
-    df["runners_scoring_position"] = (
-        (df["runner_on_2b"] == 1) | (df["runner_on_3b"] == 1)
-    ).astype(int)
-
-    df["pitcher_minus_batter_success"] = (
-        df["asof_pitcher_success_rate"] - df["asof_batter_success_rate"]
-    )
-    df["pitcher_middle_minus_success"] = (
-        df["asof_pitcher_middle_rate"] - df["asof_pitcher_success_rate"]
-    )
-    df["pitcher_recent_form_delta"] = (
-        df["asof_pitcher_prev1_game_success_rate"]
-        - df["asof_pitcher_prev5_game_success_rate"]
-    )
-
-    df["pitcher_experience_log"] = np.log1p(df["asof_pitcher_n"])
-    df["batter_experience_log"] = np.log1p(df["asof_batter_n"])
-
-    mix_cols = [
-        "asof_pitcher_fastball_rate",
-        "asof_pitcher_breaking_rate",
-        "asof_pitcher_offspeed_rate",
-    ]
-    mix_sq_sum = sum(df[c].fillna(0) ** 2 for c in mix_cols)
-    df["pitchmix_diversity"] = 1 - mix_sq_sum
+    df = build_features(df)
+    df = apply_shrinkage(df, shrinkage_priors)
 
     # 학습 때와 동일한 인코더로 정수 인코딩 (category dtype은 소량 배치
     # 추론에서 LightGBM 네이티브 크래시를 일으켜 사용하지 않음)
@@ -131,6 +108,7 @@ def main():
     meta = joblib.load(META_PATH)
     all_features = meta["all_features"]
     cat_encoder = meta["cat_encoder"]
+    shrinkage_priors = meta["shrinkage_priors"]
     print(f" OK. n_features={len(all_features)}")
 
     print("Load test data...")
@@ -140,7 +118,7 @@ def main():
 
     print("Build features...")
     ids = test[ID_COL].tolist()
-    X = build_features(test, cat_encoder)[all_features]
+    X = build_features_for_inference(test, cat_encoder, shrinkage_priors)[all_features]
     print(f" features={X.shape[1]}")
 
     print("Inference model...")

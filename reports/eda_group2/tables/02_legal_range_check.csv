@@ -1,0 +1,4 @@
+column,expected_range,n_out_of_range,out_of_range_values
+balls_before,"[0, 3]",0,[]
+strikes_before,"[0, 2]",0,[]
+outs_before,"[0, 2]",0,[]
