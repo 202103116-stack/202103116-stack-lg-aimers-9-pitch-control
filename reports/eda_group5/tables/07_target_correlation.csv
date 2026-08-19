@@ -1,0 +1,10 @@
+column,pearson_corr
+asof_pitcher_prev5_game_success_rate,0.08156931730369739
+asof_pitcher_prev3_game_success_rate,0.07777597856830884
+asof_pitcher_prev1_game_success_rate,0.061688667365711526
+asof_batter_success_rate,0.05894622108356782
+asof_batter_n,-0.036275753040484554
+asof_batter_middle_rate,-0.03382127251508375
+asof_pitcher_prev5_game_middle_rate,-0.03195211988661344
+asof_pitcher_prev3_game_middle_rate,-0.028295680695774855
+asof_pitcher_prev1_game_middle_rate,-0.01945981475687614

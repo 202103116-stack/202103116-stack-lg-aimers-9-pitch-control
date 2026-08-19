@@ -1,0 +1,9 @@
+column,dtype,n_null,n_unique,min,max
+runner_on_1b,int64,0,2,0,1
+runner_on_2b,int64,0,2,0,1
+runner_on_3b,int64,0,2,0,1
+num_runners_on,int64,0,4,0,3
+base_state,str,0,8,,
+home_win_expectancy,float64,0,977,0.0,100.0
+away_win_expectancy,float64,0,981,0.0,100.0
+li,float64,0,502,0.0,10.83

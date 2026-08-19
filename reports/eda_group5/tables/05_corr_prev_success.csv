@@ -1,0 +1,4 @@
+,asof_pitcher_prev1_game_success_rate,asof_pitcher_prev3_game_success_rate,asof_pitcher_prev5_game_success_rate
+asof_pitcher_prev1_game_success_rate,1.0,0.6618395729786466,0.5734795997245159
+asof_pitcher_prev3_game_success_rate,0.6618395729786466,1.0,0.882156703035297
+asof_pitcher_prev5_game_success_rate,0.5734795997245159,0.882156703035297,1.0

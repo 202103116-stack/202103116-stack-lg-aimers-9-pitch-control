@@ -1,0 +1,3 @@
+id_col,n_unique_id,median_rows_per_id,n_id_under_100,n_id_over_200,success_rate_p10_over_200,success_rate_median_over_200,success_rate_p90_over_200
+pitcher_id,792,856.5,143,577,0.45658857082041726,0.5211382113821138,0.5928500043832734
+batter_id,830,473.0,229,507,0.48946695986317496,0.5267538644470868,0.6069075033458133

@@ -1,0 +1,10 @@
+column,dtype,n_null,null_pct,min,max
+asof_pitcher_prev1_game_success_rate,float64,29185,1.9785206617621138,0.0,1.0
+asof_pitcher_prev3_game_success_rate,float64,29185,1.9785206617621138,0.0,1.0
+asof_pitcher_prev5_game_success_rate,float64,29185,1.9785206617621138,0.0,1.0
+asof_pitcher_prev1_game_middle_rate,float64,29185,1.9785206617621138,0.0,1.0
+asof_pitcher_prev3_game_middle_rate,float64,29185,1.9785206617621138,0.0,1.0
+asof_pitcher_prev5_game_middle_rate,float64,29185,1.9785206617621138,0.0,1.0
+asof_batter_n,int64,0,0.0,0.0,13927.0
+asof_batter_success_rate,float64,830,0.05626767686354479,0.0,1.0
+asof_batter_middle_rate,float64,830,0.05626767686354479,0.0,1.0

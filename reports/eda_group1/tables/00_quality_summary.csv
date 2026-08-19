@@ -1,0 +1,13 @@
+column,dtype,n_null,n_unique,min,max
+season,int64,0,6,2019,2024
+game_month,int64,0,8,3,10
+game_dayofweek,int64,0,7,0,6
+inning,int64,0,13,1,13
+top_bottom,str,0,2,,
+game_type,str,0,2,,
+pitcher_hand,int64,0,2,1,2
+batter_hand,int64,0,2,1,2
+pitcher_team_id,int64,0,13,12,25
+batter_team_id,int64,0,13,12,25
+pitcher_id,int64,0,792,20700,24633
+batter_id,int64,0,830,20889,24632

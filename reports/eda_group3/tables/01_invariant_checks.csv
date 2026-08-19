@@ -1,0 +1,8 @@
+check,violations
+"runner_on_1b in {0,1}",0
+"runner_on_2b in {0,1}",0
+"runner_on_3b in {0,1}",0
+"num_runners_on in [0,3]",0
+num_runners_on == sum(runner_on_1b/2b/3b),0
+base_state consistent with runner flags,0
+home_win_expectancy + away_win_expectancy range,"min=99.9000, max=100.1000"
