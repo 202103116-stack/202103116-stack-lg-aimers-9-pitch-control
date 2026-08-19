@@ -6,8 +6,13 @@ data/*.zip
 model/*.pkl
 model/*.joblib
 model/*.txt
+model/*.cbm
 references/baseline_example/rf.pkl
 output/*.csv
+
+# CatBoost auto-generated training logs (learn/test error history, not
+# a model artifact itself, regenerated every run)
+catboost_info/
 
 # Submission packaging artifacts (rebuilt by src/package_submission.py
 # before each submit; submission/submit.zip is also covered by the blanket

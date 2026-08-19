@@ -4,9 +4,14 @@ numpy==1.26.4
 scikit-learn==1.8.0
 joblib==1.5.3
 
-# 평가 서버에 없어서 별도 설치 필요 (제출용 requirements.txt에도 포함)
+# 평가 서버에 없어서 별도 설치 필요
+# exp_003부터 제출 모델은 catboost (제출용 requirements.txt에는 이것만 포함).
+# lightgbm/xgboost는 exp_001/exp_002 코드가 여전히 참조하므로 로컬 개발용으로
+# 남겨둠 — 단, lightgbm은 이 로컬 환경(Windows)에서 원인 불명의 네이티브
+# 크래시가 발생 중이라 현재 로컬에서 재현이 안 됨 (experiments/exp_003_*.md 참고).
 lightgbm==4.7.0
 xgboost==3.2.0
+catboost==1.2.10
 
 # 로컬 개발/EDA 전용 (제출용 requirements.txt에는 불필요)
 matplotlib
