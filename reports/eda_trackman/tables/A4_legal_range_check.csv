@@ -1,0 +1,4 @@
+column,min,max,n_out_of_range,pct_out_of_range
+balls_before,0,4,1,0.0001
+strikes_before,0,3,1,0.0001
+outs_before,0,4,95,0.0053
