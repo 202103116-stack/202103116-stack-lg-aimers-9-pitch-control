@@ -30,8 +30,14 @@ catboost_info/
 # is a fresh copy of src/features.py made at packaging time (exp_002+) —
 # src/features.py is the tracked source of truth, this copy is not.
 submission/model/
-submission/archive/
 submission/features.py
+
+# submission/archive/<label>/ — keep script.py + requirements.txt tracked
+# (this is the exact code that was actually submitted for that leaderboard
+# entry, teammates need to be able to find it) but not the binary model
+# artifacts or the zip, which follow the same rules as model/ above.
+submission/archive/*/model/
+submission/archive/*/submit.zip
 
 # Python
 __pycache__/
