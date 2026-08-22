@@ -1,0 +1,119 @@
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+  warnings.warn(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+  warnings.warn(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+  warnings.warn(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+  warnings.warn(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+  warnings.warn(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+  warnings.warn(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 200 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=200).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+  warnings.warn(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 200 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=200).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+  warnings.warn(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 200 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=200).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+C:\Users\yeob0\lgAimers9_pitch-control\lg-aimers-9-pitch-control\.venv\Lib\site-packages\lightgbm\sklearn.py:1106: LGBMDeprecationWarning: The argument 'eval_set' is deprecated, use 'eval_X' and 'eval_y' instead.
+  eval_set = _validate_eval_set_Xy(eval_set=eval_set, eval_X=eval_X, eval_y=eval_y)
+
+================================================================================
+Step 0 — 데이터 타입 요약
+================================================================================
+train.csv 컬럼 48개 -> data_type_summary.csv 저장
+trackman_history.csv 컬럼 30개 (200k행 샘플, 참고용) -> data_type_summary_trackman.csv 저장
+
+================================================================================
+Step 1 — 피처 구축 + season-aware shrinkage priors
+================================================================================
+train: (1475092, 74) | 피처: 84
+시즌: 2019 ~ 2024
+train: 1221585 | val: 253507
+
+================================================================================
+Step 2 — Phase A: 모델 6종 학습
+================================================================================
+[A0 Mean] p=0.5316
+[LR cardinality check] pitcher_id+batter_id unique 합계=1453 (임계값 5000) -> LR-2 가능
+[A1 LR-1] best_C=0.01 C_grid_scores={0.01: 24.914089117034077, 0.1: 20.82146540266505, 1.0: 20.407274345013438, 10.0: 20.36580542422728}
+[A1 LR-2] best_C=0.01 C_grid_scores={0.01: 0.0, 0.1: 0.0, 1.0: 0.0, 10.0: 0.0}
+[A2 RandomForest] train_sec=161.1s
+[A3 ExtraTrees] train_sec=49.3s
+[A4 CatBoost] train_sec=324.1s best_iter=510
+
+[sanity check] CatBoost brier=0.248000 score=723.17 (exp_003 기록값: brier=0.248000, score=723.17)
+[sanity check] PASSED — 공유 파이프라인이 exp_003을 정확히 재현함, 계속 진행.
+[A5 LightGBM] 건너뜀: skipped:OSError (exception: access violation reading 0x0000000000000000)
+
+================================================================================
+Step 3 — Phase B: 모델 비교표 / calibration / correlation
+================================================================================
+       Model          status    Brier  Official_Score  LogLoss  Calibration_Error  Train_sec  Infer_sec  Model_MB  pred_mean     pred_std  pred_min  pred_max
+    CatBoost              ok 0.248000      723.165782 0.689133           0.008972 324.114371   0.321943  0.581921   0.494981 4.129124e-02  0.323685  0.651431
+RandomForest              ok 0.248623      473.743479 0.690387           0.014077 161.110591   0.657203  7.223528   0.500182 3.558281e-02  0.384774  0.666707
+  ExtraTrees              ok 0.249259      219.403032 0.691668           0.020876  49.347363   0.686092  6.317141   0.506981 2.788431e-02  0.399558  0.666809
+Logistic_LR1              ok 0.249745       24.914089 0.692663           0.014196  75.298149   0.566663  0.012873   0.492333 4.664603e-02  0.303785  0.706072
+        Mean              ok 0.251875        0.000000 0.696904           0.045477   0.002028   0.000000  0.000000   0.531582 4.440892e-16  0.531582  0.531582
+Logistic_LR2              ok 0.250017        0.000000 0.693218           0.020043 199.094028   1.211849  0.035166   0.487211 5.081475e-02  0.278380  0.701728
+    LightGBM skipped:OSError      NaN             NaN      NaN                NaN        NaN        NaN       NaN        NaN          NaN       NaN       NaN
+prediction_correlation.csv / .png 저장 완료
+
+================================================================================
+Step 4 — Phase C: 가중 확률 블렌드 탐색
+================================================================================
+블렌드 후보: ['CatBoost', 'RandomForest', 'ExtraTrees']
+최적 블렌드 weights={'CatBoost': 1.0, 'RandomForest': 0.0, 'ExtraTrees': 0.0} brier=0.248000 score=723.17
+
+================================================================================
+Step 5 — Phase D: calibration (2019-2022 fit / 2023 calibrate / 2024 eval)
+================================================================================
+fit(2019-2022)=976060 | calib(2023)=245525 | eval(2024)=253507 (== val_mask: True)
+최고 단일 모델: CatBoost
+[calibration] CatBoost 2단계 calibration 실행 중...
+  CatBoost/raw: brier=0.248000 score=723.17 cal_err=0.0090
+  CatBoost/platt: brier=0.250000 score=0.00 cal_err=0.0139
+  CatBoost/isotonic: brier=0.248834 score=389.57 cal_err=0.0138
+[calibration] ExtraTrees 2단계 calibration 실행 중...
+  ExtraTrees/raw: brier=0.249259 score=219.40 cal_err=0.0209
+  ExtraTrees/platt: brier=0.249487 score=127.94 cal_err=0.0211
+  ExtraTrees/isotonic: brier=0.248865 score=376.97 cal_err=0.0059
+[calibration] RandomForest 2단계 calibration 실행 중...
+  RandomForest/raw: brier=0.248623 score=473.74 cal_err=0.0141
+  RandomForest/platt: brier=0.249149 score=263.44 cal_err=0.0216
+  RandomForest/isotonic: brier=0.248774 score=413.59 cal_err=0.0084
+calibration_summary.csv 저장 완료
+
+================================================================================
+Step 6 — model/ 디렉터리 변경 여부 확인 (변경되면 안 됨)
+================================================================================
+./model\catboost_model.cbm: mtime=Wed Aug 19 11:26:54 2026 (스크립트가 이 파일을 쓴 적 없음)
+./model\model_meta.pkl: mtime=Wed Aug 19 11:26:54 2026 (스크립트가 이 파일을 쓴 적 없음)
+
+완료. reports/model_selection/*.csv, *.png 를 바탕으로 experiments/exp_006_model_selection.md 를 작성하라.

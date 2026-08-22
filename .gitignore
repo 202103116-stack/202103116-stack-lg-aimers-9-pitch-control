@@ -1,14 +1,24 @@
 # Competition data (large files, not versioned)
 data/*.csv
 data/*.zip
+data/processed/
 
-# Trained model artifacts
+# Trained model artifacts / generated lookup tables
 model/*.pkl
 model/*.joblib
 model/*.txt
 model/*.cbm
+model/*.csv
+model/*.py
 references/baseline_example/rf.pkl
 output/*.csv
+output/*.npy
+output/*.npz
+output/*.pkl
+
+# Large derived mapping tables (regenerate via reports/trackman_id_mapping/run_mapping.py;
+# code/docs/log are tracked, the multi-hundred-MB row-level CSVs are not)
+reports/trackman_id_mapping/tables/row_mapping*.csv
 
 # CatBoost auto-generated training logs (learn/test error history, not
 # a model artifact itself, regenerated every run)

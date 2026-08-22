@@ -50,8 +50,10 @@ inform feature-engineering rationale and any explainability writeups
 When making decisions, use the following priority:
 
 1. DACON official competition description, evaluation, rules, notices
-   (mirrored locally at `docs/dacon_notice.md` — collected 2026-08-12;
-   if it conflicts with anything below, this source wins)
+   (mirrored locally at `docs/dacon_notice.md` — collected 2026-08-12,
+   with a §4-4 Q&A addendum added 2026-08-20 covering Trackman ID-mapping
+   permission, LUPI/teacher-student permission, and the `game_type` R/F
+   definition; if it conflicts with anything below, this source wins)
 2. `docs/data_description.md` (official data dictionary)
 3. Official distributed dataset (`data/`)
 4. Official baseline notebooks (`notebooks/baseline/`) and
@@ -362,6 +364,21 @@ LightGBM 사용 시 주의: `LGBMClassifier`(sklearn 래퍼)를 joblib/pickle로
 `booster_.save_model(path)` / `lgb.Booster(model_file=path)`(LightGBM
 자체 텍스트 포맷)으로 저장/로드할 것 — `src/train_lgbm.py`,
 `submission/script.py`가 이 패턴을 따름.
+
+**Import 순서 주의(2026-08-21, `experiments/exp_013_*.md` 진단, 같은 날
+아카이브 격리 테스트 중 원인 재규명)**: 이 환경(Windows)에서
+`lightgbm`은 **`pandas`보다 반드시 먼저 import**해야 한다 —
+`pandas`(또는 `catboost`)가 먼저 import/사용된 뒤 `lightgbm`을 쓰면
+데이터 내용과 무관하게(순수 랜덤 배열로도 재현) `lgb.Dataset(...)`
+생성이나 `Booster.predict(...)`가 access violation으로 크래시한다.
+처음엔 "catboost를 lightgbm보다 먼저 import하면 깨진다"로 좁게
+진단했었지만, `submission/script.py`(최상단에 `import pandas as pd`가
+항상 먼저 실행됨)의 격리 테스트에서 catboost를 아예 건드리지 않았는데도
+같은 크래시가 재현되어 **진짜 원인은 pandas-vs-lightgbm 순서**임을
+확인했다(catboost-먼저도 별도로 크래시를 유발하는 것 자체는 맞지만,
+pandas가 더 근본적인 트리거). 결론: `lightgbm`을 쓸 가능성이 있는
+스크립트/모듈은 **파일 맨 위, 다른 어떤 import보다도 먼저**
+`import lightgbm as lgb`를 둘 것(`submission/script.py`가 이 패턴).
 
 Expected submitted archive layout — `src/package_submission.py`가
 이 구조로 `submission/submit.zip`을 생성함:
