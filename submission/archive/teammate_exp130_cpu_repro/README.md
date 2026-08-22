@@ -1,4 +1,4 @@
-# 팀원(윤석진) 파이프라인 재현 — EXP_130 (GPU→CPU 대체)
+# 팀원(허찬) 파이프라인 재현 — EXP_130 (GPU→CPU 대체)
 
 **출처**: `github.com/seokjin-wq/Aimers-9th` (팀 저장소)의
 `experiment_workspace`, EXP_130 (`triple_count_trend_ols`, 130개 실험
