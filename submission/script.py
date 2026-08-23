@@ -241,7 +241,8 @@ def main():
     elif model_type == "ensemble":
         preds = np.zeros(len(X))
         lgb_members = [m for m in meta["members"] if m["type"] == "lightgbm"]
-        cb_members = [m for m in meta["members"] if m["type"] != "lightgbm"]
+        et_members = [m for m in meta["members"] if m["type"] == "extra_trees"]
+        cb_members = [m for m in meta["members"] if m["type"] not in ("lightgbm", "extra_trees")]
         if lgb_members:
             import lightgbm as lgb
             X_enc = X.copy()
@@ -249,6 +250,16 @@ def main():
             for m in lgb_members:
                 obj = lgb.Booster(model_file=os.path.join(MODEL_DIR, m["file"]))
                 preds = preds + m["weight"] * obj.predict(X_enc)
+        if et_members:
+            # exp_031/037: ExtraTrees has no native categorical support (unlike
+            # CatBoost/LightGBM) -- CAT_COLS are ordinal-encoded with the SAME
+            # encoder fit alongside this member at train time (saved together
+            # in one joblib bundle, distinct from the LightGBM encoder above).
+            for m in et_members:
+                bundle = joblib.load(os.path.join(MODEL_DIR, m["file"]))
+                X_et = X.copy()
+                X_et[CAT_COLS] = bundle["encoder"].transform(X_et[CAT_COLS]).astype(int)
+                preds = preds + m["weight"] * bundle["pipe"].predict_proba(X_et)[:, 1]
         if cb_members:
             import catboost as cb
             for m in cb_members:

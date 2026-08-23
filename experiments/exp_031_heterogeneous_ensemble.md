@@ -81,3 +81,41 @@ no_extrapolation/model/model_meta.pkl`)의 `all_features`(정확히 105개)를
 - **다음 가설**: 이종 앙상블 자체는 유효한 신호로 판단 — exp_037
   조립 단계에서 채택. affine 보정(exp_032)을 블렌드 전에 추가하면
   더 개선되는지 다음 실험으로 확인.
+
+## 프로덕션 빌드 (2026-08-23, `src/train_exp031_production.py`)
+
+exp_037과 별개로, 이 이종 앙상블 자체를 **진짜 OOF 기반 보정**으로
+독립 프로덕션화(exp_037은 시간 예산 문제로 이걸 제외했음 — 원래
+계획대로 "향후 과제"였던 걸 사용자가 밤새 재개 지시해서 실행).
+
+- **비용 절감 재사용**: CatBoost-A는 exp_027/exp_030과 완전히 동일한
+  아키텍처라 캐시된 OOF(`exp027_oof_cache_seed{42,1}.npz`)와 프로덕션
+  모델 파일을 그대로 재사용(재학습 안 함, ~110분 절약). CatBoost-B/
+  ExtraTrees만 새로 5-fold OOF(seed=42 단일) 생성.
+- **블렌드 가중치**(2024 val raw 위에서 재탐색): CatBoost-A 0.35 /
+  CatBoost-B 0.44 / ExtraTrees 0.21 (raw 블렌드 score=834.41).
+- **진짜 OOF 기반 step1 Platt + count-trend, 2024 진짜 held-out 검증**:
+
+  | 단계 | score |
+  |---|---|
+  | step1 Platt만 | 888.27 |
+  | step1 + count-trend | **896.99** |
+  | 기준선(exp_030_repro) | 875.00 |
+  | Δ | **+21.99** |
+
+  → **이 라운드에서 로컬 검증 개선폭이 가장 큼**(exp_037의 +10.80,
+  quick_033의 +6.21보다 확실히 큼).
+- **프로덕션 아티팩트**: `submission/archive/
+  exp031_heterogeneous_ensemble_production/`에 패키징 완료.
+  `submission/script.py`의 `model_type=="ensemble"` 분기에 새
+  `extra_trees` 멤버 타입 지원을 추가(`{"encoder":..., "pipe":...}`
+  joblib 번들 로드 후 예측) — 격리 테스트(임시 폴더, 새 프로세스)로
+  정상 동작 확인(NaN 없음, 확률 [0.39, 0.51]).
+- **용량/속도 확인**: ExtraTrees 번들 738MB(zip 전체 731MB, 제한
+  10GB/32GB 대비 여유), 245,789행 추론 시간 **0.91초**(제한 10분
+  대비 압도적으로 여유) — 계획에서 우려했던 항목 모두 통과.
+- **주의**: 같은 밤 quick_033(로컬 +6.21)이 LB에서 -9.37로
+  하락했다(`SUBMISSION_LOG.md`). 이 결과는 quick_033/exp_037과
+  달리 season_decay 성분이 전혀 없는(순수 모델 구조 다양화) 별개의
+  개선 메커니즘이라 같은 실패가 반복될 근거는 약하지만, 로컬
+  검증만으로 확신하지 말고 실제 제출로 재확인 필요.

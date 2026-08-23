@@ -1,0 +1,23 @@
+================================================================================
+0. 데이터/피처 구축: exp_030의 105개 + 신규 구종군별 트랙맨 15개
+================================================================================
+train=(1221585, 120), val=(253507, 120), n_features=120 (105 + 15 신규)
+신규 컬럼: ['trackman_rel_speed_fastball_asof', 'trackman_rel_speed_breaking_asof', 'trackman_rel_speed_offspeed_asof', 'trackman_spin_rate_fastball_asof', 'trackman_spin_rate_breaking_asof', 'trackman_spin_rate_offspeed_asof', 'trackman_induced_vert_break_fastball_asof', 'trackman_induced_vert_break_breaking_asof', 'trackman_induced_vert_break_offspeed_asof', 'trackman_horz_break_fastball_asof', 'trackman_horz_break_breaking_asof', 'trackman_horz_break_offspeed_asof', 'trackman_extension_fastball_asof', 'trackman_extension_breaking_asof', 'trackman_extension_offspeed_asof']
+
+================================================================================
+1. baseline: exp_030의 105개 피처만 (비교 기준)
+================================================================================
+[105피처 raw] Brier=0.247762 | score=818.79 (best_iter=571)
+
+================================================================================
+2. 105 + 구종군별 트랙맨 15개
+================================================================================
+[120피처 raw] Brier=0.247751 | score=822.92 (best_iter=517)
+
+================================================================================
+결과 요약 (raw, 보정 전 -- 두 변형 다 동일 처리라 직접 비교 유효)
+================================================================================
+  105피처(baseline)     = 818.79
+  105+구종군15(exp_035) = 822.92
+  Δ = +4.13
+완료.

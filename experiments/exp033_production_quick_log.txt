@@ -1,0 +1,50 @@
+================================================================================
+1. 2019-2023 학습 / 2024 검증 (105피처, decay=0.90) -- 2시드
+================================================================================
+train=(1221585, 105), val=(253507, 105)
+[seed=42] 816.5s best_iter=426 raw score=828.87
+[seed=1] 643.8s best_iter=403 raw score=815.48
+[2시드 평균] raw Brier=0.247741 score=827.12
+
+================================================================================
+2. step1 Platt (exp_027 캐시 OOF[2019-2023, 비-decay] + 이번 decay val_pred[2024])
+================================================================================
+coef=[[4.36967826]], intercept=[-2.22415194]
+[step1 only, 2024 held-out] score=874.35
+
+================================================================================
+3. count-trend 검증 (2019-2023 잔차로 2024 진짜 held-out 외삽)
+================================================================================
+[step1 + count-trend, 2024 held-out] score=881.21 (기준선 875.00, Δ=+6.21)
+
+================================================================================
+4. 프로덕션 재학습: 2019-2024 전체 (decay=0.90, holdout best_iter 재사용)
+================================================================================
+full train=(1475092, 105)
+[seed=42] 최종 재학습 완료: 249.1s, iterations=427
+[seed=1] 최종 재학습 완료: 254.7s, iterations=404
+
+================================================================================
+5. count-trend 2025 외삽 (2019-2024 전체 잔차)
+================================================================================
+  ['balls_before', 'strikes_before']=(0, 0): 2025 외삽 centered_residual=-0.00241
+  ['balls_before', 'strikes_before']=(0, 1): 2025 외삽 centered_residual=+0.00700
+  ['balls_before', 'strikes_before']=(0, 2): 2025 외삽 centered_residual=+0.00310
+  ['balls_before', 'strikes_before']=(1, 0): 2025 외삽 centered_residual=-0.00800
+  ['balls_before', 'strikes_before']=(1, 1): 2025 외삽 centered_residual=-0.00191
+  ['balls_before', 'strikes_before']=(1, 2): 2025 외삽 centered_residual=+0.00686
+  ['balls_before', 'strikes_before']=(2, 0): 2025 외삽 centered_residual=-0.00277
+  ['balls_before', 'strikes_before']=(2, 1): 2025 외삽 centered_residual=-0.00761
+  ['balls_before', 'strikes_before']=(2, 2): 2025 외삽 centered_residual=+0.00632
+  ['balls_before', 'strikes_before']=(3, 0): 2025 외삽 centered_residual=+0.02408
+  ['balls_before', 'strikes_before']=(3, 1): 2025 외삽 centered_residual=-0.00307
+  ['balls_before', 'strikes_before']=(3, 2): 2025 외삽 centered_residual=-0.00647
+
+================================================================================
+6. 메타/lookup 저장 (exp_030 아카이브의 priors/lookup 그대로 재사용 -- decay와 무관)
+================================================================================
+저장: ./model/model_meta.pkl
+복사: trackman/season_state lookup CSV (exp_030 원본 그대로)
+
+검증 점수(2024 held-out, step1+count-trend) = 881.21 (기준선 875.00 대비 +6.21)
+완료.
