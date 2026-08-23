@@ -1,0 +1,20 @@
+C:\Users\yeob0\lgAimers9_pitch-control\_teammate_repo\experiment_workspace\src\aimers_exp\features.py:688: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  out[f"{pressure_name}_x_pitcher_{metric}"] = (
+C:\Users\yeob0\lgAimers9_pitch-control\_teammate_repo\experiment_workspace\src\aimers_exp\features.py:688: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  out[f"{pressure_name}_x_pitcher_{metric}"] = (
+C:\Users\yeob0\lgAimers9_pitch-control\_teammate_repo\experiment_workspace\src\aimers_exp\features.py:688: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  out[f"{pressure_name}_x_pitcher_{metric}"] = (
+C:\Users\yeob0\lgAimers9_pitch-control\_teammate_repo\experiment_workspace\src\aimers_exp\features.py:688: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  out[f"{pressure_name}_x_pitcher_{metric}"] = (
+C:\Users\yeob0\lgAimers9_pitch-control\_teammate_repo\experiment_workspace\src\aimers_exp\features.py:688: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  out[f"{pressure_name}_x_pitcher_{metric}"] = (
+C:\Users\yeob0\lgAimers9_pitch-control\_teammate_repo\experiment_workspace\src\aimers_exp\features.py:688: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  out[f"{pressure_name}_x_pitcher_{metric}"] = (
+C:\Users\yeob0\lgAimers9_pitch-control\_teammate_repo\experiment_workspace\src\aimers_exp\features.py:688: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  out[f"{pressure_name}_x_pitcher_{metric}"] = (
+[2024] baseline_78
+[2024] trackman20
+{
+  "status": "complete",
+  "run_dir": "C:\\Users\\yeob0\\lgAimers9_pitch-control\\_teammate_repo\\experiment_workspace\\runs\\scratch_trackman20\\20260823T034807626142Z_f6419ad9e8a7"
+}
